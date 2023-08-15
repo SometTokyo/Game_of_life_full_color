@@ -53,7 +53,7 @@ void writeData(Image *image)
       for (uint32_t i=0; i < image->rows; i++){
 	      for (uint32_t j=0; j < image->cols; j++){
 		      printf("%3hhu %3hhu %3hhu",image->image[i][j].R, image->image[i][j].G,image->image[i][j].B);
-		      if (j != image->cols){
+		      if (j != image->cols-1){
 			      printf("   ");
 		      }
 	      }
