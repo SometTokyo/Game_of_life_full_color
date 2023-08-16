@@ -39,13 +39,16 @@ Image *steganography(Image *image)
 	secretImage->rows = row;
 	secretImage->cols = col;	
 	secretImage->image = (Color **) malloc(row*sizeof(Color *));
-        for (uint32_t i = 0; i < image->rows; i++){
+        Color *pixel;
+	for (uint32_t i = 0; i < image->rows; i++){
 	        secretImage->image[i] = (Color *) malloc(col*sizeof(Color));
 	}
 	for (uint32_t i=0; i < row; i++){		
 		for (uint32_t j=0; j < col; j++){
-	                uint8_t blue = evaluateOnePixel(image,i,j)->B;
+			pixel = evaluateOnePixel(image,i,j);
+			uint8_t blue = pixel->B;
 	                uint8_t bit = blue & 1;
+			free(pixel);
 			if (bit == 1){
 				secretImage->image[i][j].R = 255;
 				secretImage->image[i][j].G = 255;
@@ -83,11 +86,13 @@ int main(int argc, char **argv)
 		exit(-1);
 	}
         Image *image;
+	Image *targetImage;
         char *filename;
         filename = argv[1];
         image = readData(filename);
-        image = steganography(image);
-        writeData(image);
+        targetImage = steganography(image);
+        writeData(targetImage);
         freeImage(image);
+	freeImage(targetImage);
         return 0;	
 }
