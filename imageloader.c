@@ -48,7 +48,7 @@ Image *readData(char *filename)
 void writeData(Image *image)
 {
       printf("P3\n");
-      printf("%u %u\n",image->rows,image->cols);
+      printf("%u %u\n",image->cols,image->rows);
       printf("255\n");
       for (uint32_t i=0; i < image->rows; i++){
 	      for (uint32_t j=0; j < image->cols; j++){

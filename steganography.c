@@ -22,12 +22,43 @@
 Color *evaluateOnePixel(Image *image, int row, int col)
 {
 	//YOUR CODE HERE
+	Color *px = (Color *) malloc (sizeof(Color));
+	px->R = image->image[row][col].R;
+	px->G = image->image[row][col].G;
+	px->B = image->image[row][col].B;
+	return px;
 }
 
 //Given an image, creates a new image extracting the LSB of the B channel.
 Image *steganography(Image *image)
 {
 	//YOUR CODE HERE
+	Image *secretImage = (Image *) malloc(sizeof(Image));
+        uint32_t row = image->rows;
+        uint32_t col = image->cols;
+	secretImage->rows = row;
+	secretImage->cols = col;	
+	secretImage->image = (Color **) malloc(row*sizeof(Color *));
+        for (uint32_t i = 0; i < image->rows; i++){
+	        secretImage->image[i] = (Color *) malloc(col*sizeof(Color));
+	}
+	for (uint32_t i=0; i < row; i++){		
+		for (uint32_t j=0; j < col; j++){
+	                uint8_t blue = evaluateOnePixel(image,i,j)->B;
+	                uint8_t bit = blue & 1;
+			if (bit == 1){
+				secretImage->image[i][j].R = 255;
+				secretImage->image[i][j].G = 255;
+				secretImage->image[i][j].B = 255;	   
+	                }
+			else{
+				secretImage->image[i][j].R = 0;
+				secretImage->image[i][j].G = 0;
+				secretImage->image[i][j].B = 0;
+	                }
+		}
+	}
+	return secretImage;
 }
 
 /*
@@ -46,4 +77,17 @@ Make sure to free all memory before returning!
 int main(int argc, char **argv)
 {
 	//YOUR CODE HERE
+	if (argc != 2){
+		printf("usage: %s filename\n",argv[0]);
+		printf("filename is an ASCII PPM file (type P3) with maximum value 255.\n");
+		exit(-1);
+	}
+        Image *image;
+        char *filename;
+        filename = argv[1];
+        image = readData(filename);
+        image = steganography(image);
+        writeData(image);
+        freeImage(image);
+        return 0;	
 }
