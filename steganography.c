@@ -23,10 +23,19 @@ Color *evaluateOnePixel(Image *image, int row, int col)
 {
 	//YOUR CODE HERE
 	Color *px = (Color *) malloc (sizeof(Color));
-	px->R = image->image[row][col].R;
-	px->G = image->image[row][col].G;
 	px->B = image->image[row][col].B;
-	return px;
+    uint8_t bit = px->B & 1;
+    if (bit == 1){
+        px->R = 255;
+        px->G = 255;
+        px->B = 255;
+    }
+    else{
+        px->R = 0;
+        px->G = 0;
+        px->B = 0;
+    }
+    return px;
 }
 
 //Given an image, creates a new image extracting the LSB of the B channel.
@@ -34,31 +43,18 @@ Image *steganography(Image *image)
 {
 	//YOUR CODE HERE
 	Image *secretImage = (Image *) malloc(sizeof(Image));
-        uint32_t row = image->rows;
-        uint32_t col = image->cols;
-	secretImage->rows = row;
-	secretImage->cols = col;	
-	secretImage->image = (Color **) malloc(row*sizeof(Color *));
-        Color *pixel;
+	secretImage->rows = image->rows;
+	secretImage->cols = image->cols;
+	secretImage->image = (Color **) malloc(secretImage->rows*sizeof(Color *));
+    Color *pixel;
 	for (uint32_t i = 0; i < image->rows; i++){
-	        secretImage->image[i] = (Color *) malloc(col*sizeof(Color));
+        secretImage->image[i] = (Color *) malloc(secretImage->cols*sizeof(Color));
 	}
-	for (uint32_t i=0; i < row; i++){		
-		for (uint32_t j=0; j < col; j++){
+	for (uint32_t i=0; i < secretImage->rows; i++){
+		for (uint32_t j=0; j < secretImage->cols; j++){
 			pixel = evaluateOnePixel(image,i,j);
-			uint8_t blue = pixel->B;
-	                uint8_t bit = blue & 1;
-			free(pixel);
-			if (bit == 1){
-				secretImage->image[i][j].R = 255;
-				secretImage->image[i][j].G = 255;
-				secretImage->image[i][j].B = 255;	   
-	                }
-			else{
-				secretImage->image[i][j].R = 0;
-				secretImage->image[i][j].G = 0;
-				secretImage->image[i][j].B = 0;
-	                }
+            secretImage->image[i][j] = *pixel;
+            free(pixel);
 		}
 	}
 	return secretImage;
@@ -85,14 +81,15 @@ int main(int argc, char **argv)
 		printf("filename is an ASCII PPM file (type P3) with maximum value 255.\n");
 		exit(-1);
 	}
-        Image *image;
-	Image *targetImage;
-        char *filename;
-        filename = argv[1];
-        image = readData(filename);
-        targetImage = steganography(image);
-        writeData(targetImage);
-        freeImage(image);
+    Image *image;
+    Image *targetImage;
+    char *filename;
+    filename = argv[1];
+    image = readData(filename);
+    targetImage = steganography(image);
+    writeData(targetImage);
+    freeImage(image);
 	freeImage(targetImage);
-        return 0;	
+    return 0;
 }
+

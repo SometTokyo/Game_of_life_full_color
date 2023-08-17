@@ -23,6 +23,27 @@
 Color *evaluateOneCell(Image *image, int row, int col, uint32_t rule)
 {
 	//YOUR CODE HERE
+	Color *cell = (Color *) malloc (sizeof(Color));
+        cell->R = image->image[row][col].R;
+	cell->G = image->image[row][col].G;
+	cell->B = image->image[row][col].B;
+        for (uint32_t i=0; i < row; i++){
+                for (uint32_t j=0; j < col; j++){
+                        uint8_t blue = cell->B;
+                        uint8_t bit = blue & 1;
+                        if (bit == 1){
+                                nextImage->image[i][j].R = 255;
+                                nextImage->image[i][j].G = 255;
+                                nextImage->image[i][j].B = 255;
+                        }
+                        else{
+                                nextImage->image[i][j].R = 0;
+                                nextImage->image[i][j].G = 0;
+                                nextImage->image[i][j].B = 0;
+                        }
+                }
+        }
+	return cell;
 }
 
 //The main body of Life; given an image and a rule, computes one iteration of the Game of Life.
@@ -30,6 +51,35 @@ Color *evaluateOneCell(Image *image, int row, int col, uint32_t rule)
 Image *life(Image *image, uint32_t rule)
 {
 	//YOUR CODE HERE
+	Image *nextImage = (Image *) malloc(sizeof(Image));
+        uint32_t row = image->rows;
+        uint32_t col = image->cols;
+	nextImage->rows = row;
+	nextImage->cols = col;	
+	nextImage->image = (Color **) malloc(row*sizeof(Color *));
+        Color *pixel;
+	for (uint32_t i = 0; i < row; i++){
+	        nextImage->image[i] = (Color *) malloc(col*sizeof(Color));
+	}
+	for (uint32_t i=0; i < row; i++){		
+		for (uint32_t j=0; j < col; j++){
+			pixel = evaluateOneCell(image,i,j,rule);
+			uint8_t blue = pixel->B;
+	                uint8_t bit = blue & 1;
+			free(pixel);
+			if (bit == 1){
+				nextImage->image[i][j].R = 255;
+				nextImage->image[i][j].G = 255;
+				nextImage->image[i][j].B = 255;	   
+	                }
+			else{
+				nextImage->image[i][j].R = 0;
+				nextImage->image[i][j].G = 0;
+				nextImage->image[i][j].B = 0;
+	                }
+		}
+	}
+	return nextImage;
 }
 
 /*
