@@ -25,6 +25,7 @@
 //Make sure that you close the file with fclose before returning.
 Image *readData(char *filename) 
 {   
+      //YOUR CODE HERE 
       Image *img = (Image *) malloc(sizeof(Image));
       FILE *fp = fopen(filename,"r");
       fscanf(fp,"%*[^\n]%*1[\n]");
@@ -41,12 +42,13 @@ Image *readData(char *filename)
 	}      
       }
       fclose(fp);
-      return img;      //YOUR CODE HERE
+      return img;     
 }
 
 //Given an image, prints to stdout (e.g. with printf) a .ppm P3 file with the image's data.
 void writeData(Image *image)
 {
+      //YOUR CODE HERE
       printf("P3\n");
       printf("%u %u\n",image->cols,image->rows);
       printf("255\n");
@@ -58,16 +60,17 @@ void writeData(Image *image)
 		      }
 	      }
 	      printf("\n");
-      }      //YOUR CODE HERE
+      }
 }
 
 //Frees an image
 void freeImage(Image *image)
 {
+	//YOUR CODE HERE
 	for (uint32_t i=0; i < image->rows; i++){
 		free(image->image[i]);
 	}
 	free(image->image);
-	free(image);//YOUR CODE HERE
+	free(image);
 }
 
