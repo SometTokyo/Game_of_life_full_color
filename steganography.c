@@ -24,18 +24,18 @@ Color *evaluateOnePixel(Image *image, int row, int col)
 	//YOUR CODE HERE
 	Color *px = (Color *) malloc (sizeof(Color));
 	px->B = image->image[row][col].B;
-    uint8_t bit = px->B & 1;
-    if (bit == 1){
-        px->R = 255;
-        px->G = 255;
-        px->B = 255;
-    }
-    else{
-        px->R = 0;
-        px->G = 0;
-        px->B = 0;
-    }
-    return px;
+        uint8_t bit = px->B & 1;
+        if (bit == 1){
+		px->R = 255;
+                px->G = 255;
+                px->B = 255;
+        }
+        else{
+		px->R = 0;
+                px->G = 0;
+                px->B = 0;
+        }
+        return px;
 }
 
 //Given an image, creates a new image extracting the LSB of the B channel.
@@ -46,15 +46,15 @@ Image *steganography(Image *image)
 	secretImage->rows = image->rows;
 	secretImage->cols = image->cols;
 	secretImage->image = (Color **) malloc(secretImage->rows*sizeof(Color *));
-    Color *pixel;
+        Color *pixel;
 	for (uint32_t i = 0; i < image->rows; i++){
         secretImage->image[i] = (Color *) malloc(secretImage->cols*sizeof(Color));
 	}
 	for (uint32_t i=0; i < secretImage->rows; i++){
 		for (uint32_t j=0; j < secretImage->cols; j++){
 			pixel = evaluateOnePixel(image,i,j);
-            secretImage->image[i][j] = *pixel;
-            free(pixel);
+                        secretImage->image[i][j] = *pixel;
+                        free(pixel);
 		}
 	}
 	return secretImage;
@@ -77,19 +77,19 @@ int main(int argc, char **argv)
 {
 	//YOUR CODE HERE
 	if (argc != 2){
-		printf("usage: %s filename\n",argv[0]);
-		printf("filename is an ASCII PPM file (type P3) with maximum value 255.\n");
-		exit(-1);
+	printf("usage: %s filename\n",argv[0]);
+	printf("filename is an ASCII PPM file (type P3) with maximum value 255.\n");
+	exit(-1);
 	}
-    Image *image;
-    Image *targetImage;
-    char *filename;
-    filename = argv[1];
-    image = readData(filename);
-    targetImage = steganography(image);
-    writeData(targetImage);
-    freeImage(image);
+        Image *image;
+        Image *targetImage;
+        char *filename;
+        filename = argv[1];
+        image = readData(filename);
+        targetImage = steganography(image);
+        writeData(targetImage);
+        freeImage(image);
 	freeImage(targetImage);
-    return 0;
+        return 0;
 }
 
