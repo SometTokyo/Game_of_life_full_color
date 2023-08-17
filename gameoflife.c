@@ -34,7 +34,6 @@ Color *evaluateOneCell(Image *image, int row, int col, uint32_t rule)
                         if (bit == 1){
                                 nextImage->image[i][j].R = 255;
                                 nextImage->image[i][j].G = 255;
-                                nextImage->image[i][j].B = 255;
                         }
                         else{
                                 nextImage->image[i][j].R = 0;
