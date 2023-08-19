@@ -47,7 +47,7 @@ Color *evaluateOneCell(Image *image, int row, int col, uint32_t rule)
     uint8_t Rbit, Gbit, Bbit;
     uint8_t cellRbit, cellGbit, cellBbit;
 
-    //R
+    //R channel
     for (int n = 0; n < 8; n++) {
         for (x = row - 1; x <= row + 1; x++) {
             for (y = col - 1; y <= col + 1; y++) {
@@ -56,7 +56,9 @@ Color *evaluateOneCell(Image *image, int row, int col, uint32_t rule)
                 }
                 x_temp = (x + image->rows) % image->rows;
                 y_temp = (y + image->cols) % image->cols;
-                /*x_temp = x;
+                /*
+		This is unsuccessful old method
+		x_temp = x;
                 y_temp = y;
                 if (x < 0) {
                     x_temp = image->rows - 1;
@@ -79,7 +81,6 @@ Color *evaluateOneCell(Image *image, int row, int col, uint32_t rule)
         }
 
         cellRbit = get_bit(cell->R, n);
-
         if (cellRbit == 0) {
             nextState = 1 & (rule >> numOfNeighbors);
         } else {
@@ -95,7 +96,7 @@ Color *evaluateOneCell(Image *image, int row, int col, uint32_t rule)
         numOfNeighbors = 0;
     }
 
-    //G
+    //G channel
     for (int n = 0; n < 8; n++) {
         for (x = row - 1; x <= row + 1; x++) {
             for (y = col - 1; y <= col + 1; y++) {
@@ -104,7 +105,8 @@ Color *evaluateOneCell(Image *image, int row, int col, uint32_t rule)
                 }
                 x_temp = (x + image->rows) % image->rows;
                 y_temp = (y + image->cols) % image->cols;
-                /*x_temp = x;
+                /*This is unsuccessful old method
+		x_temp = x;
                 y_temp = y;
                 if (x < 0) {
                     x_temp = image->rows - 1;
@@ -118,7 +120,6 @@ Color *evaluateOneCell(Image *image, int row, int col, uint32_t rule)
                 if (y > image->cols - 1) {
                     y_temp = 0;
                 }*/
-
 
                 Gbit = get_bit(image->image[x_temp][y_temp].G, n);
                 if (Gbit) {
@@ -143,7 +144,7 @@ Color *evaluateOneCell(Image *image, int row, int col, uint32_t rule)
         numOfNeighbors = 0;
     }
 
-    //B
+    //B channel
     for (int n = 0; n < 8; n++) {
         for (x = row - 1; x <= row + 1; x++) {
             for (y = col - 1; y <= col + 1; y++) {
@@ -152,7 +153,9 @@ Color *evaluateOneCell(Image *image, int row, int col, uint32_t rule)
                 }
                 x_temp = (x + image->rows) % image->rows;
                 y_temp = (y + image->cols) % image->cols;
-                /*x_temp = x;
+                /*
+		This is unsuccessful old method
+		x_temp = x;
                 y_temp = y;
                 if (x < 0) {
                     x_temp = image->rows - 1;
@@ -165,8 +168,8 @@ Color *evaluateOneCell(Image *image, int row, int col, uint32_t rule)
                 }
                 if (y > image->cols - 1) {
                     y_temp = 0;
-                }*/
-
+                }
+		*/
 
                 Bbit = get_bit(image->image[x_temp][y_temp].B, n);
                 if (Bbit) {
@@ -176,7 +179,6 @@ Color *evaluateOneCell(Image *image, int row, int col, uint32_t rule)
         }
 
         cellBbit = get_bit(cell->B, n);
-
         if (cellBbit == 0) {
             nextState = 1 & (rule >> numOfNeighbors);
         } else {
