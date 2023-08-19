@@ -54,7 +54,9 @@ Color *evaluateOneCell(Image *image, int row, int col, uint32_t rule)
                 if (x == row && y == col) {
                     continue;
                 }
-                x_temp = x;
+                x_temp = (x + image->rows) % image->rows;
+                y_temp = (y + image->cols) % image->cols;
+                /*x_temp = x;
                 y_temp = y;
                 if (x < 0) {
                     x_temp = image->rows - 1;
@@ -67,8 +69,8 @@ Color *evaluateOneCell(Image *image, int row, int col, uint32_t rule)
                 }
                 if (y > image->cols - 1) {
                     y_temp = 0;
-                }
-                 
+                }*/
+
                 Rbit = get_bit(image->image[x_temp][y_temp].R, n);
                 if (Rbit) {
                     numOfNeighbors++;
@@ -100,9 +102,10 @@ Color *evaluateOneCell(Image *image, int row, int col, uint32_t rule)
                 if (x == row && y == col) {
                     continue;
                 }
-                x_temp = x;
+                x_temp = (x + image->rows) % image->rows;
+                y_temp = (y + image->cols) % image->cols;
+                /*x_temp = x;
                 y_temp = y;
-
                 if (x < 0) {
                     x_temp = image->rows - 1;
                 }
@@ -114,7 +117,8 @@ Color *evaluateOneCell(Image *image, int row, int col, uint32_t rule)
                 }
                 if (y > image->cols - 1) {
                     y_temp = 0;
-                }
+                }*/
+
 
                 Gbit = get_bit(image->image[x_temp][y_temp].G, n);
                 if (Gbit) {
@@ -146,7 +150,9 @@ Color *evaluateOneCell(Image *image, int row, int col, uint32_t rule)
                 if (x == row && y == col) {
                     continue;
                 }
-                x_temp = x;
+                x_temp = (x + image->rows) % image->rows;
+                y_temp = (y + image->cols) % image->cols;
+                /*x_temp = x;
                 y_temp = y;
                 if (x < 0) {
                     x_temp = image->rows - 1;
@@ -159,7 +165,8 @@ Color *evaluateOneCell(Image *image, int row, int col, uint32_t rule)
                 }
                 if (y > image->cols - 1) {
                     y_temp = 0;
-                }
+                }*/
+
 
                 Bbit = get_bit(image->image[x_temp][y_temp].B, n);
                 if (Bbit) {
