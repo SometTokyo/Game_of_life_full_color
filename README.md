@@ -9,8 +9,8 @@ Compile the program using the following command:
 $ make gameoflife
 ```
 
-Place the image you wish to include in the iterations in the testInput/ folder, making sure the file format is .ppm. Then use the following command:  
-将您想参与迭代的图像放置在testInput/文件夹里，确保文件格式为.ppm。接下来使用如下指令：
+Place the image you wish to include in the iterations in the **testInput/** folder, making sure the file format is **.ppm**. Then use the following command:  
+将您想参与迭代的图像放置在 **testInput/** 文件夹里，确保文件格式为 **.ppm**。接下来使用如下指令：
 ```
 $ ./frames.csh [prefix of ppm file in testInputs] [rule in hex] [number of frames]
 ```
@@ -26,7 +26,7 @@ If you only want the result of one iteration, please execute:
 ```
 $ ./gameOfLife [file] [rule]
 ```
-Note, the output result is in .ppm format and the output path is studentOutputs/  
-注意，输出结果为.ppm输出路径为studentOutputs/
+Note, the output result is in **.ppm** format and the output path is **studentOutputs/**.  
+注意，输出结果为 **.ppm** 输出路径为 **studentOutputs/**。
 
-[Regarding the rules](https://en.wikipedia.org/wiki/Lifelike_cellular_automaton#A_selection_of_Life-like_rules)
+[Regarding the rules](https://en.wikipedia.org/wiki/Life-like_cellular_automaton#A_selection_of_Life-like_rule)
