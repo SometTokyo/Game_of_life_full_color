@@ -1,7 +1,7 @@
 ## Game-of-life-full-color
 > The Game of Life in 24-bit full color, written in C language. Project 1 from the Berkeley CS61Cfa20.
 
-:maple_leaf: This is the effect under the 'life' rules by Conway, the inventor of the Game of Life.
+:maple_leaf: A photo of Conway, showing the effect under the 'life' rules, the inventor of the Game of Life.
 
 ![Conway](jc.gif)
 
