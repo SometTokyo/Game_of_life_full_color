@@ -17,68 +17,201 @@
 #include <inttypes.h>
 #include "imageloader.h"
 
+
+unsigned get_bit(uint8_t x, unsigned n) {
+    x >>= n;
+    x  &= 1;
+    return x;
+}
+
+void set_bit(uint8_t * x, unsigned n, unsigned v) {
+    unsigned mask = ~(1<<n);
+    *x = (*x & mask) | (v<<n);
+}
+
 //Determines what color the cell at the given row/col should be. This function allocates space for a new Color.
 //Note that you will need to read the eight neighbors of the cell in question. The grid "wraps", so we treat the top row as adjacent to the bottom row
 //and the left column as adjacent to the right column.
 Color *evaluateOneCell(Image *image, int row, int col, uint32_t rule)
 {
-	//YOUR CODE HERE
-	Color *cell = (Color *) malloc (sizeof(Color));
-        cell->R = image->image[row][col].R;
-	cell->G = image->image[row][col].G;
-	cell->B = image->image[row][col].B;
-        for (uint32_t i=0; i < row; i++){
-                for (uint32_t j=0; j < col; j++){
-                        uint8_t blue = cell->B;
-                        uint8_t bit = blue & 1;
-                        if (bit == 1){
-                                nextImage->image[i][j].R = 255;
-                                nextImage->image[i][j].G = 255;
-                        }
-                        else{
-                                nextImage->image[i][j].R = 0;
-                                nextImage->image[i][j].G = 0;
-                                nextImage->image[i][j].B = 0;
-                        }
+    //YOUR CODE HERE
+    Color *cell = (Color *) malloc(sizeof(Color));
+    cell->R = image->image[row][col].R;
+    cell->G = image->image[row][col].G;
+    cell->B = image->image[row][col].B;
+
+    uint8_t numOfNeighbors = 0;
+    uint32_t nextState;
+    int x, y;
+    uint32_t x_temp, y_temp;
+    uint8_t Rbit, Gbit, Bbit;
+    uint8_t cellRbit, cellGbit, cellBbit;
+
+    //R
+    for (int n = 0; n < 8; n++) {
+        for (x = row - 1; x <= row + 1; x++) {
+            for (y = col - 1; y <= col + 1; y++) {
+                if (x == row && y == col) {
+                    continue;
                 }
+                x_temp = x;
+                y_temp = y;
+                if (x < 0) {
+                    x_temp = image->rows - 1;
+                }
+                if (x > image->rows - 1) {
+                    x_temp = 0;
+                }
+                if (y < 0) {
+                    y_temp = image->cols - 1;
+                }
+                if (y > image->cols - 1) {
+                    y_temp = 0;
+                }
+                 
+                Rbit = get_bit(image->image[x_temp][y_temp].R, n);
+                if (Rbit) {
+                    numOfNeighbors++;
+                }
+            }
         }
-	return cell;
+
+        cellRbit = get_bit(cell->R, n);
+
+        if (cellRbit == 0) {
+            nextState = 1 & (rule >> numOfNeighbors);
+        } else {
+            nextState = 1 & (rule >> (numOfNeighbors+9));
+        }
+
+        if (nextState == 1) {
+            set_bit(&cell->R, n, 1);
+        } else {
+            set_bit(&cell->R, n, 0);
+        }
+
+        numOfNeighbors = 0;
+    }
+
+    //G
+    for (int n = 0; n < 8; n++) {
+        for (x = row - 1; x <= row + 1; x++) {
+            for (y = col - 1; y <= col + 1; y++) {
+                if (x == row && y == col) {
+                    continue;
+                }
+                x_temp = x;
+                y_temp = y;
+
+                if (x < 0) {
+                    x_temp = image->rows - 1;
+                }
+                if (x > image->rows - 1) {
+                    x_temp = 0;
+                }
+                if (y < 0) {
+                    y_temp = image->cols - 1;
+                }
+                if (y > image->cols - 1) {
+                    y_temp = 0;
+                }
+
+                Gbit = get_bit(image->image[x_temp][y_temp].G, n);
+                if (Gbit) {
+                    numOfNeighbors++;
+                }
+            }
+        }
+
+        cellGbit = get_bit(cell->G, n);
+        if (cellGbit == 0) {
+            nextState = 1 & (rule >> numOfNeighbors);
+        } else {
+            nextState = 1 & (rule >> (numOfNeighbors+9));
+        }
+
+        if (nextState == 1) {
+            set_bit(&cell->G, n, 1);
+        } else {
+            set_bit(&cell->G, n, 0);
+        }
+
+        numOfNeighbors = 0;
+    }
+
+    //B
+    for (int n = 0; n < 8; n++) {
+        for (x = row - 1; x <= row + 1; x++) {
+            for (y = col - 1; y <= col + 1; y++) {
+                if (x == row && y == col) {
+                    continue;
+                }
+                x_temp = x;
+                y_temp = y;
+                if (x < 0) {
+                    x_temp = image->rows - 1;
+                }
+                if (x > image->rows - 1) {
+                    x_temp = 0;
+                }
+                if (y < 0) {
+                    y_temp = image->cols - 1;
+                }
+                if (y > image->cols - 1) {
+                    y_temp = 0;
+                }
+
+                Bbit = get_bit(image->image[x_temp][y_temp].B, n);
+                if (Bbit) {
+                    numOfNeighbors++;
+                }
+            }
+        }
+
+        cellBbit = get_bit(cell->B, n);
+
+        if (cellBbit == 0) {
+            nextState = 1 & (rule >> numOfNeighbors);
+        } else {
+            nextState = 1 & (rule >> (numOfNeighbors+9));
+        }
+
+        if (nextState == 1) {
+            set_bit(&cell->B, n, 1);
+        } else {
+            set_bit(&cell->B, n, 0);
+        }
+
+        numOfNeighbors = 0;
+    }
+
+    return cell;
 }
 
 //The main body of Life; given an image and a rule, computes one iteration of the Game of Life.
 //You should be able to copy most of this from steganography.c
 Image *life(Image *image, uint32_t rule)
 {
-	//YOUR CODE HERE
-	Image *nextImage = (Image *) malloc(sizeof(Image));
-        uint32_t row = image->rows;
-        uint32_t col = image->cols;
-	nextImage->rows = row;
-	nextImage->cols = col;	
-	nextImage->image = (Color **) malloc(row*sizeof(Color *));
-        Color *pixel;
-	for (uint32_t i = 0; i < row; i++){
-	        nextImage->image[i] = (Color *) malloc(col*sizeof(Color));
-	}
-	for (uint32_t i=0; i < row; i++){		
-		for (uint32_t j=0; j < col; j++){
-			pixel = evaluateOneCell(image,i,j,rule);
-			uint8_t blue = pixel->B;
-	                uint8_t bit = blue & 1;
-			free(pixel);
-			if (bit == 1){
-				nextImage->image[i][j].R = 255;
-				nextImage->image[i][j].G = 255;
-				nextImage->image[i][j].B = 255;	   
-	                }
-			else{
-				nextImage->image[i][j].R = 0;
-				nextImage->image[i][j].G = 0;
-				nextImage->image[i][j].B = 0;
-	                }
-		}
-	}
-	return nextImage;
+    //YOUR CODE HERE
+    Image *newImage = (Image *) malloc(sizeof(Image));
+    newImage->rows = image->rows;
+    newImage->cols = image->cols;
+    newImage->image = (Color **) malloc(newImage->rows*sizeof(Color *));
+
+    Color *pixel;
+    for (uint32_t i = 0; i < image->rows; i++){
+        newImage->image[i] = (Color *) malloc(newImage->cols*sizeof(Color));
+    }
+
+    for (int i=0; i < newImage->rows; i++){
+        for (int j=0; j < newImage->cols; j++){
+            pixel = evaluateOneCell(image,i,j,rule);
+            newImage->image[i][j] = *pixel;
+            free(pixel);
+        }
+    }
+
+    return newImage;
 }
 
 /*
@@ -98,5 +231,31 @@ You may find it useful to copy the code from steganography.c, to start.
 */
 int main(int argc, char **argv)
 {
-	//YOUR CODE HERE
+    //YOUR CODE HERE
+    if (argc != 3){
+        printf("usage: %s filename\n",argv[0]);
+        printf("filename is an ASCII PPM file (type P3) with maximum value 255.\n");
+        printf("rule is a hex number beginning with 0x; Life is 0x1808.\n");
+        exit(-1);
+    }
+
+    Image *image;
+    Image *targetImage;
+    char *filename;
+    const char *rulename;
+    char *endptr;
+    uint32_t rule;
+
+    filename = argv[1];
+    rulename = argv[2];
+    rule = strtol(rulename, &endptr, 16);
+    image = readData(filename);
+    targetImage = life(image,rule);
+    writeData(targetImage);
+    freeImage(image);
+    freeImage(targetImage);
+
+    return 0;
 }
+
+
