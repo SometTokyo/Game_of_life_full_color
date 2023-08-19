@@ -57,7 +57,8 @@ Color *evaluateOneCell(Image *image, int row, int col, uint32_t rule)
                 x_temp = (x + image->rows) % image->rows;
                 y_temp = (y + image->cols) % image->cols;
                 /*
-		This is unsuccessful old method
+		This is an unsuccessful old method.
+		
 		x_temp = x;
                 y_temp = y;
                 if (x < 0) {
@@ -105,8 +106,9 @@ Color *evaluateOneCell(Image *image, int row, int col, uint32_t rule)
                 }
                 x_temp = (x + image->rows) % image->rows;
                 y_temp = (y + image->cols) % image->cols;
-                /*This is unsuccessful old method
-		x_temp = x;
+                /*This is an unsuccessful old method.
+		
+	        x_temp = x;
                 y_temp = y;
                 if (x < 0) {
                     x_temp = image->rows - 1;
@@ -154,7 +156,8 @@ Color *evaluateOneCell(Image *image, int row, int col, uint32_t rule)
                 x_temp = (x + image->rows) % image->rows;
                 y_temp = (y + image->cols) % image->cols;
                 /*
-		This is unsuccessful old method
+		This is an unsuccessful old method.
+		
 		x_temp = x;
                 y_temp = y;
                 if (x < 0) {
