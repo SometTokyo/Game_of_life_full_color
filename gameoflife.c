@@ -29,6 +29,20 @@ void set_bit(uint8_t * x, unsigned n, unsigned v) {
     *x = (*x & mask) | (v<<n);
 }
 
+void change_RGB(uint8_t *cellbit, uint32_t rule, uint32_t *nextState, uint8_t numOfNeighbors, unsigned n, uint8_t *color){
+    *cellbit = get_bit(*color, n);
+    if (*cellbit == 0) {
+        *nextState = 1 & (rule >> numOfNeighbors);
+    } else {
+        *nextState = 1 & (rule >> (numOfNeighbors+9));
+    }
+    if (*nextState == 1) {
+        set_bit(&*color, n, 1);
+    } else {
+        set_bit(&*color, n, 0);
+    }
+}
+
 //Determines what color the cell at the given row/col should be. This function allocates space for a new Color.
 //Note that you will need to read the eight neighbors of the cell in question. The grid "wraps", so we treat the top row as adjacent to the bottom row
 //and the left column as adjacent to the right column.
@@ -40,26 +54,22 @@ Color *evaluateOneCell(Image *image, int row, int col, uint32_t rule)
     cell->G = image->image[row][col].G;
     cell->B = image->image[row][col].B;
 
-    uint8_t numOfNeighbors = 0;
+    uint8_t numOfNeighborsR = 0, numOfNeighborsG = 0, numOfNeighborsB = 0;
     uint32_t nextState;
     int x, y;
     int64_t x_temp, y_temp;
     uint8_t Rbit, Gbit, Bbit;
     uint8_t cellRbit, cellGbit, cellBbit;
 
-    //R channel
     for (int n = 0; n < 8; n++) {
         for (x = row - 1; x <= row + 1; x++) {
             for (y = col - 1; y <= col + 1; y++) {
                 if (x == row && y == col) {
                     continue;
                 }
-               // x_temp = (x + image->rows) % image->rows;
-               // y_temp = (y + image->cols) % image->cols;
-               
-		//This is an unsuccessful old method.
-		
-		x_temp = x;
+                //x_temp = (x + image->rows) % image->rows;
+                //y_temp = (y + image->cols) % image->cols;
+                x_temp = x;
                 y_temp = y;
                 if (x < 0) {
                     x_temp = image->rows - 1;
@@ -70,131 +80,32 @@ Color *evaluateOneCell(Image *image, int row, int col, uint32_t rule)
                 if (y < 0) {
                     y_temp = image->cols - 1;
                 }
-                if (y > (int)image->cols - 1) {
+                if (y > (int) image->cols - 1) {
                     y_temp = 0;
                 }
 
                 Rbit = get_bit(image->image[x_temp][y_temp].R, n);
                 if (Rbit) {
-                    numOfNeighbors++;
+                    numOfNeighborsR++;
                 }
-            }
-        }
-
-        cellRbit = get_bit(cell->R, n);
-        if (cellRbit == 0) {
-            nextState = 1 & (rule >> numOfNeighbors);
-        } else {
-            nextState = 1 & (rule >> (numOfNeighbors+9));
-        }
-
-        if (nextState == 1) {
-            set_bit(&cell->R, n, 1);
-        } else {
-            set_bit(&cell->R, n, 0);
-        }
-
-        numOfNeighbors = 0;
-    }
-
-    //G channel
-    for (int n = 0; n < 8; n++) {
-        for (x = row - 1; x <= row + 1; x++) {
-            for (y = col - 1; y <= col + 1; y++) {
-                if (x == row && y == col) {
-                    continue;
-                }
-               // x_temp = (x + image->rows) % image->rows;
-               //  y_temp = (y + image->cols) % image->cols;
-               // This is an unsuccessful old method.
-		
-	        x_temp = x;
-                y_temp = y;
-                if (x < 0) {
-                    x_temp = image->rows - 1;
-                }
-                if (x > (int)image->rows - 1) {
-                    x_temp = 0;
-                }
-                if (y < 0) {
-                    y_temp = image->cols - 1;
-                }
-                if (y > (int)image->cols - 1) {
-                    y_temp = 0;
-                }
-
                 Gbit = get_bit(image->image[x_temp][y_temp].G, n);
                 if (Gbit) {
-                    numOfNeighbors++;
+                    numOfNeighborsG++;
                 }
-            }
-        }
-
-        cellGbit = get_bit(cell->G, n);
-        if (cellGbit == 0) {
-            nextState = 1 & (rule >> numOfNeighbors);
-        } else {
-            nextState = 1 & (rule >> (numOfNeighbors+9));
-        }
-
-        if (nextState == 1) {
-            set_bit(&cell->G, n, 1);
-        } else {
-            set_bit(&cell->G, n, 0);
-        }
-
-        numOfNeighbors = 0;
-    }
-
-    //B channel
-    for (int n = 0; n < 8; n++) {
-        for (x = row - 1; x <= row + 1; x++) {
-            for (y = col - 1; y <= col + 1; y++) {
-                if (x == row && y == col) {
-                    continue;
-                }
-               // x_temp = (x + image->rows) % image->rows;
-               // y_temp = (y + image->cols) % image->cols;
-                
-		//This is an unsuccessful old method.
-		
-		x_temp = x;
-                y_temp = y;
-                if (x < 0) {
-                    x_temp = image->rows - 1;
-                }
-                if (x > (int)image->rows - 1) {
-                    x_temp = 0;
-                }
-                if (y < 0) {
-                    y_temp = image->cols - 1;
-                }
-                if (y > (int)image->cols - 1) {
-                    y_temp = 0;
-                }
-		
-
                 Bbit = get_bit(image->image[x_temp][y_temp].B, n);
                 if (Bbit) {
-                    numOfNeighbors++;
+                    numOfNeighborsB++;
                 }
             }
         }
 
-        cellBbit = get_bit(cell->B, n);
-        if (cellBbit == 0) {
-            nextState = 1 & (rule >> numOfNeighbors);
-        } else {
-            nextState = 1 & (rule >> (numOfNeighbors+9));
-        }
+        change_RGB(&cellRbit, rule, &nextState, numOfNeighborsR, n, &cell->R);
+        change_RGB(&cellGbit, rule, &nextState, numOfNeighborsG, n, &cell->G);
+        change_RGB(&cellBbit, rule, &nextState, numOfNeighborsB, n, &cell->B);        
 
-        if (nextState == 1) {
-            set_bit(&cell->B, n, 1);
-        } else {
-            set_bit(&cell->B, n, 0);
-        }
-
-        numOfNeighbors = 0;
+        numOfNeighborsR = 0;
+        numOfNeighborsG = 0;
+        numOfNeighborsB = 0;
     }
 
     return cell;
