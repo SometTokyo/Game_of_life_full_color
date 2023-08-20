@@ -43,7 +43,7 @@ Color *evaluateOneCell(Image *image, int row, int col, uint32_t rule)
     uint8_t numOfNeighbors = 0;
     uint32_t nextState;
     int x, y;
-    uint32_t x_temp, y_temp;
+    int64_t x_temp, y_temp;
     uint8_t Rbit, Gbit, Bbit;
     uint8_t cellRbit, cellGbit, cellBbit;
 
@@ -54,25 +54,25 @@ Color *evaluateOneCell(Image *image, int row, int col, uint32_t rule)
                 if (x == row && y == col) {
                     continue;
                 }
-                x_temp = (x + image->rows) % image->rows;
-                y_temp = (y + image->cols) % image->cols;
-                /*
-		This is an unsuccessful old method.
+               // x_temp = (x + image->rows) % image->rows;
+               // y_temp = (y + image->cols) % image->cols;
+               
+		//This is an unsuccessful old method.
 		
 		x_temp = x;
                 y_temp = y;
                 if (x < 0) {
                     x_temp = image->rows - 1;
                 }
-                if (x > image->rows - 1) {
+                if (x > (int) image->rows - 1) {
                     x_temp = 0;
                 }
                 if (y < 0) {
                     y_temp = image->cols - 1;
                 }
-                if (y > image->cols - 1) {
+                if (y > (int)image->cols - 1) {
                     y_temp = 0;
-                }*/
+                }
 
                 Rbit = get_bit(image->image[x_temp][y_temp].R, n);
                 if (Rbit) {
@@ -104,24 +104,24 @@ Color *evaluateOneCell(Image *image, int row, int col, uint32_t rule)
                 if (x == row && y == col) {
                     continue;
                 }
-                x_temp = (x + image->rows) % image->rows;
-                y_temp = (y + image->cols) % image->cols;
-                /*This is an unsuccessful old method.
+               // x_temp = (x + image->rows) % image->rows;
+               //  y_temp = (y + image->cols) % image->cols;
+               // This is an unsuccessful old method.
 		
 	        x_temp = x;
                 y_temp = y;
                 if (x < 0) {
                     x_temp = image->rows - 1;
                 }
-                if (x > image->rows - 1) {
+                if (x > (int)image->rows - 1) {
                     x_temp = 0;
                 }
                 if (y < 0) {
                     y_temp = image->cols - 1;
                 }
-                if (y > image->cols - 1) {
+                if (y > (int)image->cols - 1) {
                     y_temp = 0;
-                }*/
+                }
 
                 Gbit = get_bit(image->image[x_temp][y_temp].G, n);
                 if (Gbit) {
@@ -153,26 +153,26 @@ Color *evaluateOneCell(Image *image, int row, int col, uint32_t rule)
                 if (x == row && y == col) {
                     continue;
                 }
-                x_temp = (x + image->rows) % image->rows;
-                y_temp = (y + image->cols) % image->cols;
-                /*
-		This is an unsuccessful old method.
+               // x_temp = (x + image->rows) % image->rows;
+               // y_temp = (y + image->cols) % image->cols;
+                
+		//This is an unsuccessful old method.
 		
 		x_temp = x;
                 y_temp = y;
                 if (x < 0) {
                     x_temp = image->rows - 1;
                 }
-                if (x > image->rows - 1) {
+                if (x > (int)image->rows - 1) {
                     x_temp = 0;
                 }
                 if (y < 0) {
                     y_temp = image->cols - 1;
                 }
-                if (y > image->cols - 1) {
+                if (y > (int)image->cols - 1) {
                     y_temp = 0;
                 }
-		*/
+		
 
                 Bbit = get_bit(image->image[x_temp][y_temp].B, n);
                 if (Bbit) {
