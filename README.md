@@ -28,7 +28,6 @@ If you only want the result of one iteration, please run:
 ```
 $ ./gameOfLife [file] [rule]
 ```
-Note, the output result is in **.ppm** format and the output path is **studentOutputs/**.  
-注意，输出结果为 **.ppm**， 输出路径为 **studentOutputs/**。
+
 
 [Regarding the rules](https://en.wikipedia.org/wiki/Life-like_cellular_automaton#A_selection_of_Life-like_rule)
