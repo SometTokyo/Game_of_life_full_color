@@ -37,9 +37,9 @@ void change_RGB(uint8_t *cellbit, uint32_t rule, uint32_t *nextState, uint8_t nu
         *nextState = 1 & (rule >> (numOfNeighbors+9));
     }
     if (*nextState == 1) {
-        set_bit(&*color, n, 1);
+        set_bit(color, n, 1);
     } else {
-        set_bit(&*color, n, 0);
+        set_bit(color, n, 0);
     }
 }
 
